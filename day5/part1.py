@@ -8,16 +8,14 @@ def execute_moves(stacks, moves):
 def parse_stacks(raw_stacks):
     raw_stacks = raw_stacks.splitlines()
     num_stacks = int(raw_stacks[-1].split()[-1])
-    stacks = [[] * num_stacks]
+    stacks = [[] for _ in range(num_stacks)]
     width = num_stacks * 4 - 1
-    print(raw_stacks[:-1])
     for line in reversed(raw_stacks[:-1]):
-        for i in range(num_stacks):
-            idx = 1
-            while idx < width:
-                if line[idx].isalpha():
-                    stacks[i].append(line[idx])
-                idx += 4
+        idx = 1
+        while idx < width:
+            if line[idx].isalpha():
+                stacks[idx // 4].append(line[idx])
+            idx += 4
 
     return stacks
 
@@ -34,5 +32,9 @@ with open("./input.txt", 'r') as data:
     raw_stacks, raw_moves = data.read().split('\n\n')
 
 stacks, moves = parse_stacks(raw_stacks), parse_moves(raw_moves)
-stacks = execute_moves(stacks, moves)
-print(stacks)
+new_stacks = execute_moves(stacks, moves)
+output = ''
+for column in new_stacks:
+    output += column[-1]
+
+print(output)
